@@ -1,0 +1,15 @@
+package dev.usbharu.stl.model
+
+
+import kotlinx.serialization.Serializable
+
+/**
+ * Google Tasks APIにタスク作成リクエストを送信するためのデータクラス
+ */
+@Serializable
+data class GoogleTask(
+        val title: String,
+        val notes: String? = null,
+        val due: String? = null // RFC3339 format (e.g., "2025-06-12T23:59:59.000Z")
+)
+
