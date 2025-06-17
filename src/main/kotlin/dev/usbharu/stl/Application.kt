@@ -9,6 +9,7 @@ import dev.usbharu.stl.oauth.GoogleOAuth
 import dev.usbharu.stl.plugins.configureRouting
 import dev.usbharu.stl.plugins.configureSecurity
 import dev.usbharu.stl.plugins.configureSerialization
+import dev.usbharu.stl.plugins.configureStatusPages
 import dev.usbharu.stl.plugins.configureTemplating
 import dev.usbharu.stl.service.MailReaderService
 import io.ktor.server.application.*
@@ -43,6 +44,7 @@ fun Application.module() {
     configureSerialization()
     configureSecurity()
     configureRouting()
+    configureStatusPages()
 
     // --- ここから自動実行タスク ---
 

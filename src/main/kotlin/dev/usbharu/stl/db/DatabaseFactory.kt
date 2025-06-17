@@ -25,6 +25,7 @@ object DatabaseFactory {
 
         transaction(database) {
             SchemaUtils.create(Users, MailSettings, RegexRules, TodoServices, Sessions, Tasks)
+            SchemaUtils.createMissingTablesAndColumns(Users, MailSettings, RegexRules, TodoServices, Sessions, Tasks)
         }
     }
 

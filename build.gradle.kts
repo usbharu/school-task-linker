@@ -8,11 +8,11 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.23"
 }
 
-group = "dev.usbharu"
+group = "dev.usbharu.stl"
 version = "0.0.1"
 
 application {
-    mainClass.set("dev.usbharu.ApplicationKt")
+    mainClass.set("dev.usbharu.stl.ApplicationKt")
 }
 
 repositories {
@@ -28,6 +28,7 @@ dependencies {
     implementation("io.ktor:ktor-server-freemarker-jvm")
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
+    implementation("io.ktor:ktor-server-status-pages-jvm") // <-- この行を追加
 
     // Database (Exposed & H2)
     implementation("org.jetbrains.exposed:exposed-core:0.47.0")
@@ -41,7 +42,7 @@ dependencies {
     implementation("jakarta.mail:jakarta.mail-api:2.1.3")
 
     // HTML Parser
-    implementation("org.jsoup:jsoup:1.17.2") // <-- この行を追加
+    implementation("org.jsoup:jsoup:1.17.2")
 
     // OAuth Client
     implementation("io.ktor:ktor-client-core-jvm:2.3.10")

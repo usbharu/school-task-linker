@@ -40,13 +40,16 @@ object RegexRules : Table() {
     override val primaryKey = PrimaryKey(id)
 }
 
+
 // 連携するToDoサービスの情報（特にOAuthトークン）を格納するテーブル
 object TodoServices : Table() {
     val id = integer("id").autoIncrement()
     val userId = integer("user_id").references(Users.id)
-    val serviceName = varchar("service_name", 128) // e.g., "GoogleTasks"
+    val serviceName = varchar("service_name", 128)
     val accessToken = varchar("access_token", 2048)
     val refreshToken = varchar("refresh_token", 2048).nullable()
     val expiresAt = long("expires_at")
+    // ユーザーが選択したGoogle ToDoリストのIDを保存するカラム
+    val selectedTaskListId = varchar("selected_task_list_id", 255).nullable()
     override val primaryKey = PrimaryKey(id)
 }

@@ -23,28 +23,24 @@
 
             <#-- ステータス・エラーメッセージ -->
             <#if status??>
-                <#if status == "google_connected" || status == "mail_saved" || status?starts_with("rule_")>
-                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
-                        <p class="font-bold">成功</p>
-                        <p>
-                            <#if status == "google_connected">Googleアカウントとの連携が完了しました。
-                            <#elseif status == "mail_saved">メールサーバー設定を保存しました。
-                            <#elseif status == "rule_added">正規表現ルールを追加しました。
-                            <#elseif status == "rule_updated">正規表現ルールを更新しました。
-                            <#elseif status == "rule_deleted">正規表現ルールを削除しました。
-                            </#if>
-                        </p>
-                    </div>
-                </#if>
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
+                    <p class="font-bold">成功</p>
+                    <p>
+                        <#if status == "google_connected">Googleアカウントとの連携が完了しました。
+                        <#elseif status == "google_disconnected">Googleアカウントとの連携を解除しました。
+                        <#elseif status == "google_list_saved">ToDoリストの設定を保存しました。
+                        <#elseif status == "mail_saved">メールサーバー設定を保存しました。
+                        <#elseif status == "rule_added">正規表現ルールを追加しました。
+                        <#elseif status == "rule_updated">正規表現ルールを更新しました。
+                        <#elseif status == "rule_deleted">正規表現ルールを削除しました。
+                        </#if>
+                    </p>
+                </div>
             </#if>
             <#if error??>
                 <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
                     <p class="font-bold">エラー</p>
-                    <p>
-                        <#if error == "google_failed">Googleアカウントとの連携に失敗しました。
-                        <#else>処理に失敗しました。入力内容を確認してください。
-                        </#if>
-                    </p>
+                    <p>処理に失敗しました。入力内容を確認してください。</p>
                 </div>
             </#if>
 
@@ -62,7 +58,7 @@
                     </div>
                     <div>
                         <label for="email" class="block text-sm font-medium text-slate-700">メールアドレス</label>
-                        <input type="text" name="email" id="email" value="${(mailSettings.email)!''}" required class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="user@example.com">
+                        <input type="email" name="email" id="email" value="${(mailSettings.email)!''}" required class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="user@example.com">
                     </div>
                     <div>
                         <label for="password" class="block text-sm font-medium text-slate-700">パスワード</label>
@@ -73,7 +69,7 @@
                 </form>
             </section>
 
-            <!-- 正規表現ルール (変更なし) -->
+            <!-- 正規表現ルール -->
             <section id="regex-rules" class="bg-white p-6 rounded-lg shadow scroll-mt-20">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-xl font-semibold">正規表現ルール</h3>
@@ -122,24 +118,41 @@
                 </div>
             </section>
 
-            <!-- ToDoサービス連携 (変更なし) -->
+            <!-- ToDoサービス連携 -->
             <section id="todo-integration" class="bg-white p-6 rounded-lg shadow scroll-mt-20">
                 <h3 class="text-xl font-semibold mb-4">ToDoサービス連携</h3>
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h4 class="font-medium">Google Tasks</h4>
-                            <p class="text-sm text-slate-600">GoogleのToDoリストと連携します。</p>
-                        </div>
-                        <div>
-                            <#if isGoogleConnected>
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                                    連携済み
-                                </span>
-                            <#else>
-                                <a href="/oauth/google/start" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700">連携する</a>
-                            </#if>
-                        </div>
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="font-medium text-lg">Google Tasks</h4>
+                        <#if isGoogleConnected>
+                            <div class="mt-4 space-y-4">
+                                <form action="/settings/google/savelist" method="post">
+                                    <div>
+                                        <label for="taskListId" class="block text-sm font-medium text-gray-700">タスクの追加先リスト</label>
+                                        <select id="taskListId" name="taskListId" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                            <#list googleTaskLists as list>
+                                                <option value="${list.id}" <#if currentTaskListId?? && currentTaskListId == list.id>selected</#if>>${list.title?html}</option>
+                                            </#list>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700">
+                                        保存する
+                                    </button>
+                                </form>
+                                <div class="border-t pt-4">
+                                    <form action="/settings/google/disconnect" method="post" onsubmit="return confirm('Googleアカウントとの連携を解除します。よろしいですか？');">
+                                        <button type="submit" class="text-sm text-red-600 hover:text-red-800 hover:underline">
+                                            連携を解除する
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        <#else>
+                            <p class="text-sm text-slate-600 my-2">GoogleのToDoリストと連携します。</p>
+                            <a href="/oauth/google/start" class="inline-block px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700">
+                                Googleアカウントで連携
+                            </a>
+                        </#if>
                     </div>
                 </div>
             </section>
@@ -170,7 +183,7 @@
                 modalTitle.textContent = '新しいルールを追加';
                 form.action = '/settings/rules/add';
                 ruleIdInput.value = '';
-                form.reset(); // フォームの内容をリセット
+                form.reset();
                 openModal();
             });
 

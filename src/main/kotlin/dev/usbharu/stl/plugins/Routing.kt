@@ -4,6 +4,7 @@ import dev.usbharu.stl.db.DatabaseFactory
 import dev.usbharu.stl.model.Users
 import dev.usbharu.stl.routes.authRoutes
 import dev.usbharu.stl.routes.dashboardRoutes
+import dev.usbharu.stl.routes.googleRoutes
 import dev.usbharu.stl.routes.oauthRoutes
 import dev.usbharu.stl.routes.regexRoutes
 import dev.usbharu.stl.routes.settingsRoutes
@@ -54,6 +55,8 @@ fun Application.configureRouting() {
             settingsRoutes()
             regexRoutes()
             taskRoutes()
+            googleRoutes()
+
 
             // OAuth連携用のルート (ここに実装)
             // 例: /oauth/googletasks/start, /oauth/googletasks/callback

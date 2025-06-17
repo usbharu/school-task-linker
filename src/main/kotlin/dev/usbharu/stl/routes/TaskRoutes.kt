@@ -3,6 +3,7 @@ package dev.usbharu.stl.routes
 import dev.usbharu.stl.db.DatabaseFactory.dbQuery
 import dev.usbharu.stl.model.Tasks
 import dev.usbharu.stl.model.toTaskDetail
+import dev.usbharu.stl.plugins.NotFoundException
 import dev.usbharu.stl.plugins.UserSession
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -21,7 +22,7 @@ fun Route.taskRoutes() {
         val userSession = call.principal<UserSession>()!!
         val params = call.receiveParameters()
         val taskId = params["id"]?.toIntOrNull()
-            ?: return@post call.respondRedirect("/dashboard?error=invalid_task_id")
+            ?: throw NotFoundException("Invalid Task ID")
 
         val deletedCount = dbQuery {
             Tasks.deleteWhere { (Tasks.id eq taskId) and (Tasks.userId eq userSession.userId) }
@@ -30,15 +31,15 @@ fun Route.taskRoutes() {
         if (deletedCount > 0) {
             call.respondRedirect("/dashboard?status=task_deleted")
         } else {
-            call.respondRedirect("/dashboard?error=task_delete_failed")
+            throw NotFoundException("Task with ID $taskId not found or you don't have permission.")
         }
     }
 
-    // 新しいルート：単一のタスク詳細をJSONで取得する
+    // 単一のタスク詳細をJSONで取得するルート
     get("/task/{id}") {
         val userSession = call.principal<UserSession>()!!
         val taskId = call.parameters["id"]?.toIntOrNull()
-            ?: return@get call.respond(HttpStatusCode.BadRequest, "Invalid Task ID")
+            ?: throw NotFoundException("Invalid Task ID Format")
 
         val taskDetail = dbQuery {
             Tasks.select { (Tasks.id eq taskId) and (Tasks.userId eq userSession.userId) }
@@ -46,10 +47,11 @@ fun Route.taskRoutes() {
                 .singleOrNull()
         }
 
+        // taskDetailがnullならNotFoundExceptionをスローする
         if (taskDetail != null) {
             call.respond(taskDetail)
         } else {
-            call.respond(HttpStatusCode.NotFound)
+            throw NotFoundException("Task with ID $taskId not found.")
         }
     }
 }
