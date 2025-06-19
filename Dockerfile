@@ -1,5 +1,5 @@
 # ベースイメージとして、軽量なJava 17環境を使用
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:21.0.7_6-jre-alpine
 
 # アプリケーションが使用するポート番号を定義
 ARG APP_PORT=8080
