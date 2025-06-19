@@ -6,10 +6,12 @@ import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.sessions.*
+import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.select
 import org.mindrot.jbcrypt.BCrypt
 
 // セッションに保存するユーザー情報を定義
+@Serializable
 data class UserSession(val userId: Int, val username: String) : Principal
 
 fun Application.configureSecurity() {
