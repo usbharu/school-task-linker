@@ -4,12 +4,11 @@ import dev.usbharu.stl.db.DatabaseFactory.dbQuery
 import dev.usbharu.stl.model.Tasks
 import dev.usbharu.stl.model.toTask
 import dev.usbharu.stl.plugins.UserSession
-import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.freemarker.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 
 fun Route.dashboardRoutes() {
     get("/dashboard") {
@@ -22,7 +21,7 @@ fun Route.dashboardRoutes() {
 
         // DBからユーザーのタスクをすべて取得
         val allTasks = dbQuery {
-            Tasks.select { Tasks.userId eq userSession.userId }.map(::toTask)
+            Tasks.selectAll().where { Tasks.userId eq userSession.userId }.map(::toTask)
         }
 
         // 絞り込み用のユニークな講義名リストを作成

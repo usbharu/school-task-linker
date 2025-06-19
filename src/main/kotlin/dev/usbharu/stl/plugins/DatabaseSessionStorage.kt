@@ -7,7 +7,7 @@ import io.ktor.server.sessions.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
 
 /**
@@ -19,7 +19,7 @@ class DatabaseSessionStorage : SessionStorage {
     override suspend fun write(id: String, value: String) {
         dbQuery {
             val currentTime = System.currentTimeMillis()
-            val existingSession = Sessions.select { Sessions.id eq id }.singleOrNull()
+            val existingSession = Sessions.selectAll().where { Sessions.id eq id }.singleOrNull()
 
             if (existingSession != null) {
                 // あれば更新
@@ -41,7 +41,7 @@ class DatabaseSessionStorage : SessionStorage {
     // セッションを読み込む
     override suspend fun read(id: String): String {
         return dbQuery {
-            Sessions.select { Sessions.id eq id }.singleOrNull()?.get(data)
+            Sessions.selectAll().where { Sessions.id eq id }.singleOrNull()?.get(data)
         } ?: throw NoSuchElementException("Session $id not found")
     }
 

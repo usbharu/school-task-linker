@@ -3,16 +3,15 @@ package dev.usbharu.stl.service
 import dev.usbharu.stl.db.DatabaseFactory.dbQuery
 import dev.usbharu.stl.model.RegexRule
 import dev.usbharu.stl.model.Tasks
-import dev.usbharu.stl.model.Tasks.emailUid
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.upsert
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
-import java.util.Locale
+import java.util.*
 
 class TaskProcessorService(
     private val userId: Int,
@@ -50,7 +49,7 @@ class TaskProcessorService(
 
         println("Fetching all tasks from DB for batch sync...")
         val allTasksFromDb = dbQuery {
-            Tasks.select { Tasks.userId eq this@TaskProcessorService.userId }.map(::toAppTaskFromDb)
+            Tasks.selectAll().where { Tasks.userId eq this@TaskProcessorService.userId }.map(::toAppTaskFromDb)
         }
 
         if (allTasksFromDb.isNotEmpty()) {
@@ -85,7 +84,7 @@ class TaskProcessorService(
                 val localDateTime = LocalDateTime.parse(deadlineString, formatter)
                 val zonedDateTime = ZonedDateTime.of(localDateTime, ZoneId.of("Asia/Tokyo"))
                 deadlineUtc = zonedDateTime.toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime()
-            } catch (e: DateTimeParseException) {
+            } catch (_: DateTimeParseException) {
                 println("Failed to parse deadline: '$deadlineString'.")
             }
         }
