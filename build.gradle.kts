@@ -4,7 +4,7 @@
  */
 plugins {
     kotlin("jvm") version "1.9.23"
-    id("io.ktor.plugin") version "2.3.10"
+    id("io.ktor.plugin") version "2.3.13"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.23"
 }
 
@@ -45,15 +45,15 @@ dependencies {
     implementation("org.jsoup:jsoup:1.17.2")
 
     // OAuth Client
-    implementation("io.ktor:ktor-client-core-jvm:2.3.10")
-    implementation("io.ktor:ktor-client-cio-jvm:2.3.10")
-    implementation("io.ktor:ktor-client-auth-jvm:2.3.10")
-    implementation("io.ktor:ktor-client-content-negotiation-jvm:2.3.10")
-    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:2.3.10")
+    implementation("io.ktor:ktor-client-core-jvm:2.3.13")
+    implementation("io.ktor:ktor-client-cio-jvm:2.3.13")
+    implementation("io.ktor:ktor-client-auth-jvm:2.3.13")
+    implementation("io.ktor:ktor-client-content-negotiation-jvm:2.3.13")
+    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:2.3.13")
 
 
     // Logging
-    implementation("ch.qos.logback:logback-classic:1.5.6")
+    implementation("ch.qos.logback:logback-classic:1.5.18")
 
     // Password Hashing
     implementation("org.mindrot:jbcrypt:0.4")
