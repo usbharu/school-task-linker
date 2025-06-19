@@ -4,7 +4,7 @@
  */
 plugins {
     kotlin("jvm") version "2.1.21"
-    id("io.ktor.plugin") version "2.3.13"
+    id("io.ktor.plugin") version "3.2.0"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.1.21"
 }
 
@@ -29,6 +29,7 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
     implementation("io.ktor:ktor-server-status-pages-jvm") // <-- この行を追加
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
     // Database (Exposed & H2)
     implementation("org.jetbrains.exposed:exposed-core:0.47.0")
@@ -45,11 +46,11 @@ dependencies {
     implementation("org.jsoup:jsoup:1.20.1")
 
     // OAuth Client
-    implementation("io.ktor:ktor-client-core-jvm:2.3.13")
-    implementation("io.ktor:ktor-client-cio-jvm:2.3.13")
-    implementation("io.ktor:ktor-client-auth-jvm:2.3.13")
-    implementation("io.ktor:ktor-client-content-negotiation-jvm:2.3.13")
-    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:2.3.13")
+    implementation("io.ktor:ktor-client-core-jvm:3.2.0")
+    implementation("io.ktor:ktor-client-cio-jvm:3.2.0")
+    implementation("io.ktor:ktor-client-auth-jvm:3.2.0")
+    implementation("io.ktor:ktor-client-content-negotiation-jvm:3.2.0")
+    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:3.2.0")
 
 
     // Logging
@@ -59,7 +60,6 @@ dependencies {
     implementation("org.mindrot:jbcrypt:0.4")
 
     // Testing
-    testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
