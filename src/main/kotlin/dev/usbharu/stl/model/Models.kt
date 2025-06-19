@@ -52,4 +52,8 @@ object TodoServices : Table() {
     // ユーザーが選択したGoogle ToDoリストのIDを保存するカラム
     val selectedTaskListId = varchar("selected_task_list_id", 255).nullable()
     override val primaryKey = PrimaryKey(id)
+
+    init {
+        uniqueIndex(userId, serviceName)
+    }
 }
