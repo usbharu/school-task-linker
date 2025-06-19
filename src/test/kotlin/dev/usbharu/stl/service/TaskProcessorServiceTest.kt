@@ -1,18 +1,10 @@
 package dev.usbharu.stl.service
 
-import dev.usbharu.stl.model.MailSettings
-import dev.usbharu.stl.model.RegexRule
-import dev.usbharu.stl.model.RegexRules
-import dev.usbharu.stl.model.Sessions
-import dev.usbharu.stl.model.Tasks
-import dev.usbharu.stl.model.TodoServices
-import dev.usbharu.stl.model.Users
-import dev.usbharu.stl.model.Users.passwordHash
-import dev.usbharu.stl.model.Users.username
+import dev.usbharu.stl.model.*
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upsert
@@ -96,7 +88,7 @@ class TaskProcessorServiceTest {
 
         // --- 検証 (Assert) ---
         val savedTask = transaction(database) {
-            Tasks.select { Tasks.emailUid eq testUserEmailUid }.singleOrNull()
+            Tasks.selectAll().where { Tasks.emailUid eq testUserEmailUid }.singleOrNull()
         }
 
         assertNotNull(savedTask, "タスクがDBに保存されていません。")
@@ -145,7 +137,7 @@ class TaskProcessorServiceTest {
 
         // --- 検証 (Assert) ---
         val taskCount = transaction(database) {
-            Tasks.select { Tasks.userId eq testUserId }.count()
+            Tasks.selectAll().where { Tasks.userId eq testUserId }.count()
         }
         assertEquals(2, taskCount, "2件のタスクがDBに保存されているはずです。")
     }
