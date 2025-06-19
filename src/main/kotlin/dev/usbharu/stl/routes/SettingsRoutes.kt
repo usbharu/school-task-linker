@@ -7,20 +7,19 @@ import dev.usbharu.stl.model.TodoServices
 import dev.usbharu.stl.model.toRegexRule
 import dev.usbharu.stl.plugins.UserSession
 import dev.usbharu.stl.service.GoogleTasksService
-import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.freemarker.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 
 fun Route.settingsRoutes() {
     get("/settings") {
         val userSession = call.principal<UserSession>()!!
 
         val googleServiceInfo = dbQuery {
-            TodoServices.select {
+            TodoServices.selectAll().where {
                 (TodoServices.userId eq userSession.userId) and (TodoServices.serviceName eq "GoogleTasks")
             }.singleOrNull()
         }
@@ -37,7 +36,9 @@ fun Route.settingsRoutes() {
             "isGoogleConnected" to isGoogleConnected,
             "googleTaskLists" to googleTaskLists,
             "currentTaskListId" to googleServiceInfo?.get(TodoServices.selectedTaskListId),
-            "regexRules" to dbQuery { RegexRules.select { RegexRules.userId eq userSession.userId }.map(::toRegexRule) },
+            "regexRules" to dbQuery {
+                RegexRules.selectAll().where { RegexRules.userId eq userSession.userId }.map(::toRegexRule)
+            },
             "status" to call.request.queryParameters["status"],
             "error" to call.request.queryParameters["error"]
         )

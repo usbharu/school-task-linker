@@ -6,7 +6,7 @@ import dev.usbharu.stl.model.Users
 import dev.usbharu.stl.model.Users.oauthState
 import dev.usbharu.stl.oauth.GoogleOAuth
 import dev.usbharu.stl.plugins.UserSession
-import io.ktor.client.call.body
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -16,7 +16,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
 import org.jetbrains.exposed.sql.upsert
 import java.util.*
@@ -64,7 +64,7 @@ fun Route.oauthRoutes() {
 
         // DBからstateトークンを取得して検証
         val storedState = dbQuery {
-            Users.select { Users.id eq userSession.userId }.singleOrNull()?.get(oauthState)
+            Users.selectAll().where { Users.id eq userSession.userId }.singleOrNull()?.get(oauthState)
         }
 
         if (storedState == null || receivedState != storedState) {

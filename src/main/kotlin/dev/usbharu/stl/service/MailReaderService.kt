@@ -5,13 +5,16 @@ import dev.usbharu.stl.model.MailSettings
 import dev.usbharu.stl.model.RegexRules
 import dev.usbharu.stl.model.TodoServices
 import dev.usbharu.stl.model.toRegexRule
-import jakarta.mail.*
+import jakarta.mail.Folder
+import jakarta.mail.Multipart
+import jakarta.mail.Part
+import jakarta.mail.Session
 import jakarta.mail.internet.MimeUtility
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.eclipse.angus.mail.pop3.POP3Folder
 import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import java.util.*
@@ -26,18 +29,19 @@ class MailReaderService(private val userId: Int) {
 
     suspend fun checkAndProcessEmails() {
         val mailSettings = dbQuery {
-            MailSettings.select { MailSettings.userId eq userId }.singleOrNull()
+            MailSettings.selectAll().where { MailSettings.userId eq userId }.singleOrNull()
         } ?: return
 
         val regexRules = dbQuery {
-            RegexRules.select { RegexRules.userId eq userId }.map(::toRegexRule)
+            RegexRules.selectAll().where { RegexRules.userId eq userId }.map(::toRegexRule)
         }
 
         if (regexRules.isEmpty()) return
 
         // Google連携が有効かどうかのフラグを取得
         val isGoogleConnected = dbQuery {
-            TodoServices.select { (TodoServices.userId eq userId) and (TodoServices.serviceName eq "GoogleTasks") }.any()
+            TodoServices.selectAll()
+                .where { (TodoServices.userId eq userId) and (TodoServices.serviceName eq "GoogleTasks") }.any()
         }
 
         val emails = fetchEmails(

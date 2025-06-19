@@ -5,8 +5,6 @@ import dev.usbharu.stl.model.Tasks
 import dev.usbharu.stl.model.toTaskDetail
 import dev.usbharu.stl.plugins.NotFoundException
 import dev.usbharu.stl.plugins.UserSession
-import io.ktor.http.*
-import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -14,7 +12,7 @@ import io.ktor.server.routing.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 
 fun Route.taskRoutes() {
     // 既存のタスク削除ルート
@@ -42,7 +40,7 @@ fun Route.taskRoutes() {
             ?: throw NotFoundException("Invalid Task ID Format")
 
         val taskDetail = dbQuery {
-            Tasks.select { (Tasks.id eq taskId) and (Tasks.userId eq userSession.userId) }
+            Tasks.selectAll().where { (Tasks.id eq taskId) and (Tasks.userId eq userSession.userId) }
                 .map(::toTaskDetail)
                 .singleOrNull()
         }

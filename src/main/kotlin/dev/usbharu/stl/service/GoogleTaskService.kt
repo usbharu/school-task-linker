@@ -9,17 +9,15 @@ import dev.usbharu.stl.oauth.GoogleOAuth
 import dev.usbharu.stl.routes.GoogleTokenResponse
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.bodyAsText
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.Serializable
-import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import kotlin.text.get
 
 // Google Tasks APIから返されるタスク一覧のレスポンス
 @Serializable
@@ -51,7 +49,9 @@ class GoogleTasksService(private val userId: Int) {
         }
 
         val serviceInfo = dbQuery {
-            TodoServices.select { (TodoServices.userId eq userId) and (TodoServices.serviceName eq "GoogleTasks") }.singleOrNull()
+            TodoServices.selectAll()
+                .where { (TodoServices.userId eq userId) and (TodoServices.serviceName eq "GoogleTasks") }
+                .singleOrNull()
         } ?: return
 
         val token = getValidAccessToken(serviceInfo) ?: run {
@@ -140,7 +140,9 @@ class GoogleTasksService(private val userId: Int) {
     // getTaskListsとgetValidAccessTokenは変更なし
     suspend fun getTaskLists(): List<GoogleTaskList> {
         val serviceInfo = dbQuery {
-            TodoServices.select { (TodoServices.userId eq userId) and (TodoServices.serviceName eq "GoogleTasks") }.singleOrNull()
+            TodoServices.selectAll()
+                .where { (TodoServices.userId eq userId) and (TodoServices.serviceName eq "GoogleTasks") }
+                .singleOrNull()
         } ?: return emptyList()
 
         val token = getValidAccessToken(serviceInfo) ?: return emptyList()

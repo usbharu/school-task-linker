@@ -7,7 +7,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.sessions.*
 import kotlinx.serialization.Serializable
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.mindrot.jbcrypt.BCrypt
 
 // セッションに保存するユーザー情報を定義
@@ -32,7 +32,7 @@ fun Application.configureSecurity() {
             // ユーザー名とパスワードを検証するロジック
             validate { credentials ->
                 val user = dbQuery {
-                    Users.select { Users.username eq credentials.name }.singleOrNull()
+                    Users.selectAll().where { Users.username eq credentials.name }.singleOrNull()
                 }
                 println(user)
                 println(credentials.password)

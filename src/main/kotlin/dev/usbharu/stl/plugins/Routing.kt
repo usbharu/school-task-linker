@@ -2,13 +2,7 @@ package dev.usbharu.stl.plugins
 
 import dev.usbharu.stl.db.DatabaseFactory
 import dev.usbharu.stl.model.Users
-import dev.usbharu.stl.routes.authRoutes
-import dev.usbharu.stl.routes.dashboardRoutes
-import dev.usbharu.stl.routes.googleRoutes
-import dev.usbharu.stl.routes.oauthRoutes
-import dev.usbharu.stl.routes.regexRoutes
-import dev.usbharu.stl.routes.settingsRoutes
-import dev.usbharu.stl.routes.taskRoutes
+import dev.usbharu.stl.routes.*
 import dev.usbharu.stl.service.MailReaderService
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -17,7 +11,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import kotlinx.coroutines.launch
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 
 fun Application.configureRouting() {
     routing {
@@ -34,7 +28,7 @@ fun Application.configureRouting() {
                 val principal = call.principal<UserIdPrincipal>()!!
                 //dbからuserを取得してUserSessionに詰める
                 val user = DatabaseFactory.dbQuery {
-                    Users.select { Users.username eq principal.name }.singleOrNull()
+                    Users.selectAll().where { Users.username eq principal.name }.singleOrNull()
                 }
                 if (user != null) {
                     call.sessions.set(UserSession(user[Users.id], user[Users.username]))
