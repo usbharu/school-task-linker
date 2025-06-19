@@ -35,7 +35,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-dao:0.47.0")
     implementation("org.jetbrains.exposed:exposed-jdbc:0.47.0")
     implementation("org.jetbrains.exposed:exposed-java-time:0.47.0")
-    implementation("com.h2database:h2:2.2.224")
+    implementation("com.h2database:h2:2.3.232")
 
     // Mail
     implementation("org.eclipse.angus:angus-mail:2.0.3")
