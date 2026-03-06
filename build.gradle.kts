@@ -40,7 +40,7 @@ dependencies {
 
     // Mail
     implementation("org.eclipse.angus:angus-mail:2.0.3")
-    implementation("jakarta.mail:jakarta.mail-api:2.1.3")
+    implementation("jakarta.mail:jakarta.mail-api:2.1.5")
 
     // HTML Parser
     implementation("org.jsoup:jsoup:1.20.1")
