@@ -3,7 +3,7 @@
  * プロジェクトの依存関係を管理します。
  */
 plugins {
-    kotlin("jvm") version "2.1.21"
+    kotlin("jvm") version "2.3.21"
     id("io.ktor.plugin") version "3.2.0"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.1.21"
 }
