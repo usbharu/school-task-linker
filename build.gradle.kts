@@ -39,7 +39,7 @@ dependencies {
     implementation("com.h2database:h2:2.3.232")
 
     // Mail
-    implementation("org.eclipse.angus:angus-mail:2.0.3")
+    implementation("org.eclipse.angus:angus-mail:2.0.5")
     implementation("jakarta.mail:jakarta.mail-api:2.1.3")
 
     // HTML Parser
