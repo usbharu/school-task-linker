@@ -46,11 +46,11 @@ dependencies {
     implementation("org.jsoup:jsoup:1.20.1")
 
     // OAuth Client
-    implementation("io.ktor:ktor-client-core-jvm:3.2.0")
-    implementation("io.ktor:ktor-client-cio-jvm:3.2.0")
-    implementation("io.ktor:ktor-client-auth-jvm:3.2.0")
-    implementation("io.ktor:ktor-client-content-negotiation-jvm:3.2.0")
-    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:3.2.0")
+    implementation("io.ktor:ktor-client-core-jvm:3.5.2")
+    implementation("io.ktor:ktor-client-cio-jvm:3.5.2")
+    implementation("io.ktor:ktor-client-auth-jvm:3.5.2")
+    implementation("io.ktor:ktor-client-content-negotiation-jvm:3.5.2")
+    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:3.5.2")
 
 
     // Logging
