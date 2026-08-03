@@ -4,7 +4,7 @@
  */
 plugins {
     kotlin("jvm") version "2.1.21"
-    id("io.ktor.plugin") version "3.2.0"
+    id("io.ktor.plugin") version "3.5.2"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.1.21"
 }
 
