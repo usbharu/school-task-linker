@@ -54,7 +54,7 @@ dependencies {
 
 
     // Logging
-    implementation("ch.qos.logback:logback-classic:1.5.18")
+    implementation("ch.qos.logback:logback-classic:1.6.3")
 
     // Password Hashing
     implementation("org.mindrot:jbcrypt:0.4")
