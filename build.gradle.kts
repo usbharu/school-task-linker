@@ -43,7 +43,7 @@ dependencies {
     implementation("jakarta.mail:jakarta.mail-api:2.1.3")
 
     // HTML Parser
-    implementation("org.jsoup:jsoup:1.20.1")
+    implementation("org.jsoup:jsoup:1.23.2")
 
     // OAuth Client
     implementation("io.ktor:ktor-client-core-jvm:3.2.0")
